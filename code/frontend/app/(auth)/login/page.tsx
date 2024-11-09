@@ -1,15 +1,32 @@
+"use client";
 import Image from "next/image";
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link"
+import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const authLogins = ["google", "github"];
+
+const AuthProviderLogin = (type: string) => {
+  console.log(type);
+  switch (type) {
+    case "google":
+      signIn("google", {
+        callbackUrl: "/",
+        redirect: false,
+      });
+      break;
+
+    default:
+      break;
+  }
+};
 
 const Login = () => {
   return (
     <div className="w-full min-h-screen flex">
-      <div className="relative w-2/4 h-screen"> 
+      <div className="relative w-2/4 h-screen">
         <Image src={"/coding.avif"} alt="image" fill className="object-cover" />
       </div>
       <div className="w-2/4">
@@ -39,6 +56,7 @@ const Login = () => {
               <div
                 key={type}
                 className="bg-[#E5E5E5] hover:bg-[#ded7d7] my-5 flex justify-center p-2 gap-5 items-center rounded cursor-pointer"
+                onClick={() => AuthProviderLogin(type)}
               >
                 <Image
                   src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${type}/${type}-original.svg`}
