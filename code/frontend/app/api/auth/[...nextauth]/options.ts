@@ -7,8 +7,22 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 export const authOptions: AuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+  },
   pages: {
     signIn: "/login",
+  },
+  callbacks: {
+    async signIn({ user }) {
+      let User = await prisma.user.findFirst({ where: { email: user.email! } });
+      if (User) return User;
+      User = await prisma.user.create({ data: { email: user.email! } });
+      return User;
+    },
   },
   providers: [
     CredentialsProvider({

@@ -18,5 +18,15 @@ model User {
   email    String @unique
   password String?
   username String?
+  repls Repl[]
   isVerfied Boolean @default(false)
+}
+
+model Repl {
+  Id String @id 
+  baseLanguage String
+  userId Int
+  user User @relation(fields: [userId],references: [Id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
